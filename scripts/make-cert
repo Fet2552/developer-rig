@@ -80,11 +80,7 @@ else
 	mv rigkey.pem "$SSL/selfsigned.key"
 	mv localhostcert.pem "$SSL/server.crt"
 	mv localhostkey.pem "$SSL/server.key"
-<<<<<<< HEAD
-	check "place the developer rig certificate files"
-=======
-	check "place the Developer Rig certificates"
->>>>>>> 9758f27... Update documentation and rig references
+	check "place the Developer Rig certificate files"
 fi
 
 # Copy localhost certificates to the extension conf directory.
@@ -99,16 +95,16 @@ if $NEEDS_INSTALLATION; then
 	sudo security add-trusted-cert -d -p ssl -u -1 -k /Library/Keychains/System.keychain "$D/../ssl/cacert.crt"
 	check "add the CA certificate to the local machine's root certificate store"
 	for name in server selfsigned; do
-		sudo security add-trusted-cert -d -p ssl -r trustAsRoot -k /Library/Keychains/System.keychain ssl/$name.crt
+		sudo security add-trusted-cert -d -p ssl -r trustAsRoot -k /Library/Keychains/System.keychain "$SSL/$name.crt"
 		check "add the $name certificate to the local machine's root certificate store"
 	done
 
 	# If Firefox is installed, allow it to use the certificates in the local
 	# machine's root certificate store.
 	FF=/Applications/Firefox.app/Contents/Resources
-	FF_PREF=$FF/defaults/pref
-	FF_RIG=$FF_PREF/twitch-developer-rig.js
-	if [ -d $FF_PREF ]; then
+	if [ -d $FF ]; then
+		FF_PREF=$FF/defaults/pref
+		FF_RIG=$FF_PREF/twitch-developer-rig.js
 		cat > $FF_RIG <<- EOF
 			// Twitch preferences
 			pref("security.enterprise_roots.enabled", true);'
